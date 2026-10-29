@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LMS Projek IPAS - Bumi dan Antariksa</title>
+<style>
+
+/* =====================================================
+   DASAR
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:280px;
+    height:100vh;
+    background:#111827;
+    color:white;
+    overflow-y:auto;
+    z-index:1000;
+}
+
+.sidebar-header{
+    padding:24px 20px;
+    background:#1f2937;
+    border-bottom:1px solid #374151;
+}
+
+.sidebar-header h2{
+    margin:0;
+    font-size:20px;
+}
+
+.sidebar-header p{
+    margin:8px 0 0;
+    font-size:13px;
+    color:#cbd5e1;
+    line-height:1.5;
+}
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.menu{
+    padding:15px 10px;
+}
+
+.menu-title{
+    padding:10px;
+    color:#94a3b8;
+    font-size:12px;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+.menu-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:13px 14px;
+    margin:4px 0;
+    border-radius:8px;
+    color:#e5e7eb;
+    text-decoration:none;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.menu-item:hover{
+    background:#1f2937;
+}
+
+.menu-item.active{
+    background:#2563eb;
+    color:white;
+}
+
+.menu-item.locked{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.menu-number{
+    width:28px;
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#374151;
+    font-size:13px;
+    flex-shrink:0;
+}
+
+.menu-item.active .menu-number{
+    background:white;
+    color:#2563eb;
+}
+
+.menu-text{
+    font-size:14px;
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress-box{
+    margin:15px;
+    padding:15px;
+    border-radius:10px;
+    background:#1f2937;
+}
+
+.progress-label{
+    font-size:13px;
+    color:#cbd5e1;
+    margin-bottom:10px;
+}
+
+.progress-bar{
+    width:100%;
+    height:8px;
+    background:#374151;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:#22c55e;
+    transition:.3s;
+}
+
+.progress-percent{
+    margin-top:8px;
+    text-align:right;
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:280px;
+    padding:30px;
+    min-height:100vh;
+}
+
+.page-header{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+}
+
+.page-header h1{
+    margin:0;
+    font-size:28px;
+    color:#111827;
+}
+
+.page-header p{
+    margin:8px 0 0;
+    color:#64748b;
+}
+
+
+/* =====================================================
+   LESSON
+===================================================== */
+
+.lesson{
+    background:white;
+    border-radius:14px;
+    margin-bottom:18px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    overflow:hidden;
+    scroll-margin-top:20px;
+}
+
+.lesson-header{
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    cursor:pointer;
+    border-bottom:1px solid transparent;
+}
+
+.lesson-header:hover{
+    background:#f8fafc;
+}
+
+.lesson.locked .lesson-header{
+    cursor:not-allowed;
+}
+
+.lesson-number{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    flex-shrink:0;
+}
+
+.lesson.locked .lesson-number{
+    background:#94a3b8;
+}
+
+.lesson.completed .lesson-number{
+    background:#16a34a;
+}
+
+.lesson-title{
+    flex:1;
+}
+
+.lesson-title h3{
+    margin:0 0 4px;
+    font-size:18px;
+}
+
+.lesson-title span{
+    font-size:13px;
+    color:#64748b;
+}
+
+.lesson-status{
+    font-size:12px;
+    color:#64748b;
+    white-space:nowrap;
+}
+
+.lesson-content{
+    display:none;
+    padding:25px;
+    line-height:1.7;
+}
+
+.lesson.open .lesson-content{
+    display:block;
+}
+
+.lesson-content h4{
+    color:#1d4ed8;
+    margin-top:20px;
+}
+
+.lesson-content p{
+    margin:10px 0;
+}
+
+.lesson-content ul{
+    padding-left:25px;
+}
+
+
+/* =====================================================
+   BOX
+===================================================== */
+
+.example-box{
+    background:#eff6ff;
+    border-left:5px solid #2563eb;
+    padding:15px;
+    border-radius:8px;
+    margin:15px 0;
+}
+
+.warning-box{
+    background:#fff7ed;
+    border-left:5px solid #f97316;
+    padding:15px;
+    border-radius:8px;
+    margin:15px 0;
+}
+
+.success-box{
+    background:#f0fdf4;
+    border-left:5px solid #16a34a;
+    padding:15px;
+    border-radius:8px;
+    margin:15px 0;
+}
+
+
+/* =====================================================
+   HOTS
+===================================================== */
+
+.hots-box{
+    margin-top:25px;
+    padding:20px;
+    background:#fff7ed;
+    border:2px solid #fed7aa;
+    border-radius:12px;
+}
+
+.hots-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#c2410c;
+    margin-bottom:12px;
+}
+
+.hots-title h4{
+    margin:0;
+    color:#c2410c;
+}
+
+.hots-question{
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.hots-answer{
+    width:100%;
+    min-height:130px;
+    padding:13px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    resize:vertical;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:14px;
+    line-height:1.6;
+    background:white;
+}
+
+.hots-answer:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+.save-info{
+    margin-top:8px;
+    font-size:12px;
+    color:#64748b;
+}
+
+.save-info.saved{
+    color:#16a34a;
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.complete-btn{
+    margin-top:20px;
+    padding:13px 20px;
+    border:0;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.complete-btn:hover{
+    background:#1d4ed8;
+}
+
+.complete-btn.completed{
+    background:#16a34a;
+    cursor:not-allowed;
+}
+
+.complete-btn:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+}
+
+
+/* =====================================================
+   SPECIAL SECTION
+===================================================== */
+
+.special-section{
+    background:white;
+    border-radius:14px;
+    margin-bottom:20px;
+    padding:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    scroll-margin-top:20px;
+}
+
+.special-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.special-title h2{
+    margin:0;
+}
+
+.lock-message{
+    padding:18px;
+    background:#f1f5f9;
+    border-radius:10px;
+    color:#475569;
+}
+
+
+/* =====================================================
+   VIDEO
+===================================================== */
+
+.video-container{
+    position:relative;
+    width:100%;
+    padding-bottom:56.25%;
+    height:0;
+    overflow:hidden;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.video-container iframe{
+    position:absolute;
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    border:0;
+}
+
+.question-box{
+    background:#f8fafc;
+    border-radius:10px;
+    padding:18px;
+    margin:15px 0;
+}
+
+.question-box textarea{
+    width:100%;
+    min-height:90px;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    resize:vertical;
+    font-family:inherit;
+}
+
+
+/* =====================================================
+   LKPD
+===================================================== */
+
+.lkpd-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:20px 0;
+}
+
+.lkpd-table th,
+.lkpd-table td{
+    border:1px solid #cbd5e1;
+    padding:10px;
+    vertical-align:top;
+}
+
+.lkpd-table th{
+    background:#eff6ff;
+}
+
+.lkpd-table input,
+.lkpd-table textarea{
+    width:100%;
+    border:1px solid #cbd5e1;
+    padding:8px;
+    border-radius:6px;
+    font-family:inherit;
+}
+
+.lkpd-table textarea{
+    min-height:70px;
+}
+
+
+
+
+/* GAME MENJODOHKAN */
+.match-instructions{padding:14px 16px;background:#fff7e8;border:1px solid #f4dfb4;border-radius:13px;margin:14px 0 18px;color:#77521a;line-height:1.55;}
+.match-board{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(22px,5vw,68px);padding:8px 2px 14px;isolation:isolate;}
+.match-column{display:flex;flex-direction:column;gap:11px;min-width:0;}
+.match-column h3{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:#567366;margin:0 0 3px;}
+.match-card{position:relative;z-index:auto;min-height:66px;display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #d9e7dc;border-radius:13px;background:#fff;box-shadow:0 3px 10px rgba(29,72,49,.045);line-height:1.4;font-size:14px;}
+.match-card .match-text{position:relative;z-index:3;flex:1;min-width:0;text-shadow:-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,2px 2px 0 #fff,0 -2px 0 #fff,0 2px 0 #fff,-2px 0 0 #fff,2px 0 0 #fff;}
+.match-dot{position:relative;z-index:4;width:19px;height:19px;flex:0 0 19px;border-radius:50%;border:3px solid #3a9270;background:#e4f6eb;cursor:crosshair;touch-action:none;box-shadow:0 0 0 3px white;}
+.match-dot.target{border-color:#d49a36;background:#fff0cf;}
+.match-dot:focus{outline:3px solid #8bc8a7;outline-offset:2px;}
+.match-lines{position:absolute;inset:0;width:100%;height:100%;z-index:2;overflow:visible;pointer-events:none;}
+.match-lines path{fill:none;stroke:#3a9270;stroke-width:3.5;stroke-linecap:round;opacity:.8;}
+.match-lines path.preview{stroke:#d49a36;stroke-dasharray:7 6;opacity:.95;}
+.match-status{padding:13px 15px;border-radius:12px;margin:14px 0;background:#f0f6f1;color:#345745;}
+.match-status.success{background:#e7f7ec;color:#17603d;border:1px solid #b5e0c2;}
+.match-status.retry{background:#fff4e7;color:#8a4f13;border:1px solid #f2d4ad;}
+.match-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.match-secondary{margin-top:20px;padding:12px 17px;border:1px solid #cbdccf;border-radius:11px;background:#fff;color:#315947;font-weight:700;cursor:pointer;}
+@media(max-width:620px){.match-board{gap:12px;}.match-card{padding:9px 7px;gap:6px;font-size:12px;min-height:82px;}.match-dot{width:17px;height:17px;flex-basis:17px;}.match-column h3{font-size:11px;}.match-lines path{stroke-width:2.5;}}
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+.quiz-question{
+    padding:20px;
+    background:#f8fafc;
+    border-radius:10px;
+    margin-bottom:18px;
+}
+
+.quiz-question h4{
+    margin-top:0;
+}
+
+.option{
+    display:block;
+    padding:10px;
+    margin:7px 0;
+    border:1px solid #dbe2ea;
+    border-radius:7px;
+    cursor:pointer;
+    background:white;
+}
+
+.option:hover{
+    background:#eff6ff;
+}
+
+.option input{
+    margin-right:8px;
+}
+
+.quiz-result{
+    padding:20px;
+    background:#eff6ff;
+    border-radius:10px;
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+}
+
+
+/* =====================================================
+   ACTIVITY
+===================================================== */
+
+.activity-box{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0 3px 15px rgba(0,0,0,.06);
+    margin-top:25px;
+}
+
+.activity-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.activity-item:last-child{
+    border-bottom:0;
+}
+
+.activity-icon{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.activity-item.done .activity-icon{
+    background:#22c55e;
+    color:white;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:800px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .page-header h1{
+        font-size:22px;
+    }
+
+    .lesson-header{
+        padding:14px;
+    }
+
+    .lesson-status{
+        display:none;
+    }
+
+    .lkpd-table{
+        display:block;
+        overflow-x:auto;
+    }
+
+}
+
+
+
+/* =====================================================
+   PENYEGARAN TAMPILAN: TEMA EKSPLORASI ALAM
+===================================================== */
+:root{color-scheme:light;}
+body{background:#f3f7f2;color:#20332d;font-family:Inter,"Segoe UI",Arial,sans-serif;}
+.sidebar{background:linear-gradient(165deg,#123c35 0%,#175b4d 58%,#204c43 100%);box-shadow:8px 0 28px rgba(19,60,53,.10);}
+.sidebar-header{background:transparent;border-bottom:1px solid rgba(255,255,255,.18);padding:28px 22px 24px;}
+.sidebar-header h2{letter-spacing:-.4px;line-height:1.25;}
+.sidebar-header p{color:#c7e4d8;}
+.menu-title{color:#a6cfc0;letter-spacing:1.4px;font-size:10px;}
+.menu-item{border-radius:12px;padding:12px 13px;color:#e5f5ee;transition:background .2s,transform .2s;}
+.menu-item:hover{background:rgba(255,255,255,.12);transform:translateX(2px);}
+.menu-item.active{background:#f0b85a;color:#24392f;box-shadow:0 5px 15px rgba(0,0,0,.12);font-weight:700;}
+.menu-item.active .menu-number{background:#fff;color:#1b5a4c;}
+.menu-number{border-radius:9px;background:rgba(255,255,255,.14);}
+.progress-box{background:rgba(4,28,24,.35);border:1px solid rgba(255,255,255,.13);border-radius:15px;}
+.progress-fill{background:linear-gradient(90deg,#f0b85a,#b9e3a3);}
+.main{padding:32px clamp(16px,3vw,42px);}
+.page-header{position:relative;overflow:hidden;background:linear-gradient(115deg,#155447,#247965 70%,#4a9b78);color:#fff;border-radius:24px;padding:34px 32px;margin-bottom:28px;box-shadow:0 12px 28px rgba(21,84,71,.16);}
+.page-header:after{content:"";position:absolute;width:210px;height:210px;border:28px solid rgba(255,255,255,.09);border-radius:50%;right:-42px;top:-78px;pointer-events:none;}
+.page-header h1{position:relative;z-index:1;color:#fff;font-size:clamp(24px,3vw,34px);letter-spacing:-.7px;}
+.page-header p{position:relative;z-index:1;color:#d9f1e5;font-size:15px;}
+.lesson,.special-section,.activity-box{border:1px solid #e0e9e1;border-radius:18px;box-shadow:0 5px 18px rgba(36,70,51,.055);}
+.lesson{transition:box-shadow .2s,transform .2s;}
+.lesson:hover{box-shadow:0 10px 24px rgba(36,70,51,.09);}
+.lesson-header{padding:20px 22px;}
+.lesson-header:hover{background:#f4faf5;}
+.lesson-number{border-radius:13px;background:#237b62;box-shadow:0 4px 10px rgba(35,123,98,.18);}
+.lesson.completed .lesson-number{background:#3c986b;}
+.lesson-title h3{letter-spacing:-.25px;color:#1c3f34;}
+.lesson-title span{color:#71877c;}
+.lesson-content{padding:clamp(18px,3vw,30px);}
+.lesson-content h4{color:#237b62;}
+.example-box{background:#eaf6ef;border-left-color:#2e9470;border-radius:5px 14px 14px 5px;}
+.warning-box{background:#fff5e5;border-left-color:#e7a33c;border-radius:5px 14px 14px 5px;}
+.success-box{background:#eaf7e9;border-left-color:#63a86d;border-radius:5px 14px 14px 5px;}
+.hots-box{background:#fff8eb;border:1px solid #f1d9a9;border-radius:16px;}
+.hots-title,.hots-title h4{color:#a86619;}
+.hots-answer,.question-box textarea,.lkpd-table input,.lkpd-table textarea{border-color:#d5e2d8;border-radius:11px;}
+.hots-answer:focus,.question-box textarea:focus,.lkpd-table input:focus,.lkpd-table textarea:focus{outline:none;border-color:#369475;box-shadow:0 0 0 3px rgba(54,148,117,.13);}
+.complete-btn{background:#237b62;border-radius:11px;padding:13px 20px;box-shadow:0 5px 12px rgba(35,123,98,.16);transition:transform .15s,background .15s;}
+.complete-btn:hover{background:#155b49;transform:translateY(-1px);}
+.complete-btn.completed{background:#39885e;}
+.special-title h2{color:#1c3f34;}
+.video-container{border-radius:18px;box-shadow:0 8px 24px rgba(18,55,43,.14);}
+.question-box{background:#f5faf5;border:1px solid #e0eae1;border-radius:15px;padding:20px;}
+.question-box strong{line-height:1.65;color:#25483b;}
+.question-box textarea{margin-top:4px;min-height:110px;padding:13px;background:#fff;}
+.lkpd-table th{background:#e8f4eb;color:#25483b;}
+.lkpd-table th,.lkpd-table td{border-color:#d6e4d8;}
+.quiz-question{background:#f5faf5;border:1px solid #e1eae2;border-radius:15px;}
+.option{border-color:#dce7dd;border-radius:10px;}
+.option:hover{background:#eaf6ee;border-color:#a8d4b5;}
+.quiz-result{background:#eaf6ee;border-radius:14px;color:#1c5e46;}
+.lock-message{background:#edf4ef;border:1px dashed #b9d4c1;border-radius:14px;}
+.activity-item{border-bottom-color:#e4ece5;}
+.activity-icon{border-radius:10px;background:#e5eee7;}
+.activity-item.done .activity-icon{background:#3c986b;}
+@media(max-width:800px){.sidebar{background:linear-gradient(120deg,#123c35,#247965);}.main{padding:14px;}.page-header{padding:26px 22px;border-radius:18px;}.lesson-header{padding:15px;}.lesson-content{padding:18px;}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;}}
+
+
+
+/* =====================================================
+   PEMBATASAN SALIN / TEMPEL TEKS
+   Catatan: pembatasan sisi browser, bukan proteksi anti-tamper.
+===================================================== */
+html, body, body *{
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none;
+}
+input, textarea, select{
+    -webkit-user-select:none !important;
+    user-select:none !important;
+}
+
+
+/* Adaptasi 3 materi: penanda video yang belum dikonfigurasi */
+.video-container:has(iframe[src="about:blank"]){background:#eaf6ef;min-height:210px;}
+</style>
+</head>
+<body>
+<div id="studentGate" style="position:fixed;inset:0;background:rgba(15,23,42,.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;">
+<form id="studentForm" style="background:#fff;color:#1f2937;width:min(520px,100%);padding:28px;border-radius:18px;box-shadow:0 20px 60px #0005;">
+<div style="font-size:34px;text-align:center;">🌿</div>
+<h2 style="margin:8px 0;text-align:center;">Identitas Peserta Didik</h2>
+<p style="text-align:center;color:#64748b;margin:0 0 20px;">Isi identitas sebelum mulai. Progres tersimpan di browser dan dapat direkap melalui Google Sheets jika integrasi telah dikonfigurasi.</p>
+<label style="display:block;font-weight:700;margin:12px 0 6px;">Nama lengkap</label>
+<input id="studentName" maxlength="100" placeholder="Masukkan nama lengkap" required="" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;"/>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<div><label style="display:block;font-weight:700;margin:12px 0 6px;">Kelas</label><input id="studentClass" maxlength="30" placeholder="Contoh: X TKJ 1" required="" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;"/></div>
+<div><label style="display:block;font-weight:700;margin:12px 0 6px;">No. Absen</label><input id="studentAbsen" maxlength="10" placeholder="Contoh: 12" required="" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;"/></div>
+</div>
+<button style="width:100%;margin-top:20px;padding:13px;border:0;border-radius:9px;background:#047857;color:white;font-weight:700;font-size:16px;cursor:pointer;" type="submit">Mulai / Lanjutkan LMS</button>
+<p style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:0;">Catatan: data tersimpan di browser/perangkat ini. Untuk rekap dari perangkat siswa yang berbeda, diperlukan penyimpanan online terpusat.</p>
+</form>
+</div>
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+<aside class="sidebar">
+<div class="sidebar-header">
+<h2>📚 LMS Projek IPAS</h2>
+<p>SMK Kelas X | Bumi dan Antariksa</p>
+</div>
+<div class="progress-box">
+<div class="progress-label">
+            Progress Pembelajaran
+        </div>
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill">
+</div>
+</div>
+<div class="progress-percent" id="progressText">
+            0%
+        </div>
+</div>
+<div class="menu">
+<div class="menu-title">
+            Materi Pembelajaran
+        </div>
+<a class="menu-item active" href="#individu" id="menuIndividu">
+<div class="menu-number">
+                1
+            </div>
+<div class="menu-text">Gravitasi</div>
+</a>
+<a class="menu-item locked" href="#populasi" id="menuPopulasi">
+<div class="menu-number">
+                2
+            </div>
+<div class="menu-text">Struktur Bumi</div>
+</a>
+<a class="menu-item locked" href="#komunitas" id="menuKomunitas">
+<div class="menu-number">
+                3
+            </div>
+<div class="menu-text">Penerapan Bumi dan Antariksa</div>
+</a>
+<div class="menu-title">
+            Kegiatan
+        </div>
+<a class="menu-item locked" href="#videoSection" id="menuVideo">
+<div class="menu-number">4</div>
+<div class="menu-text">
+                Video Pembelajaran
+            </div>
+</a>
+<a class="menu-item locked" href="#lkpdSection" id="menuLKPD">
+<div class="menu-number">5</div>
+<div class="menu-text">
+                LKPD
+            </div>
+</a>
+<a class="menu-item locked" href="#gameSection" id="menuGame">
+<div class="menu-number">6</div>
+<div class="menu-text">
+                Game Menjodohkan
+            </div>
+</a>
+<a class="menu-item locked" href="#quizSection" id="menuQuiz">
+<div class="menu-number">7</div>
+<div class="menu-text">
+                Kuis HOTS
+            </div>
+</a>
+</div>
+</aside>
+<!-- =====================================================
+     MAIN
+===================================================== -->
+<main class="main">
+<div class="page-header">
+<h1>🌍 Bumi dan Antariksa</h1>
+<p>
+            Projek IPAS – SMK Kelas X
+        </p>
+</div>
+<!-- =================================================
+         MATERI 1 — PENGERTIAN DAN KOMPONEN EKOSISTEM
+    ================================================== -->
+<section class="lesson open" data-lesson="1" id="individu">
+<div class="lesson-header" onclick="toggleLesson(this)">
+<div class="lesson-number">1</div>
+<div class="lesson-title"><h3>Gravitasi</h3><span>Gaya tarik Bumi, Bulan, dan Matahari</span></div>
+<div class="lesson-status" id="status1">📖 Siap Dipelajari</div>
+</div>
+<div class="lesson-content"><h4>A. Gravitasi</h4><p>Gravitasi adalah gaya tarik-menarik antara dua benda bermassa. Semakin besar massa dan semakin dekat jarak, semakin kuat gaya gravitasi.</p><h4>1. Gravitasi Bumi</h4><p>Percepatan gravitasi rata-rata di permukaan Bumi sekitar <strong>9,8 m/s²</strong>. Gravitasi memberi berat pada benda, membuat benda jatuh, menahan atmosfer, serta menjaga Bulan dan satelit buatan tetap mengorbit Bumi. Aliran air dari tempat tinggi ke rendah juga dipengaruhi gravitasi.</p><h4>2. Gravitasi Bulan</h4><p>Walaupun massanya lebih kecil, jarak Bulan yang dekat menjadikan pengaruhnya terhadap <strong>pasang surut air laut</strong> lebih dominan daripada Matahari. Perbedaan tarikan gravitasi pada bagian-bagian Bumi menimbulkan dua tonjolan pasang.</p><h4>3. Gravitasi Matahari</h4><p>Matahari memiliki massa sekitar 333.000 kali massa Bumi dan menjaga planet-planet mengorbit. Matahari turut memengaruhi pasang surut. Saat Matahari, Bumi, dan Bulan sejajar, terjadi <strong>pasang purnama</strong> dengan rentang pasang-surut lebih besar. Saat posisi membentuk sudut siku-siku, terjadi <strong>pasang perbani</strong> dengan rentang lebih kecil.</p><div class="example-box"><strong>Contoh sehari-hari:</strong> Benda yang dilepaskan jatuh ke tanah, air sungai mengalir ke bawah, dan tinggi air laut berubah mengikuti pasang surut.</div><div class="hots-box"><div class="hots-title"><span>🧠</span><h4>HOTS – Analisis</h4></div><div class="hots-question">Sebuah wilayah pesisir mengalami perubahan tinggi muka air laut sepanjang hari. Jelaskan mengapa gravitasi Bulan lebih dominan daripada Matahari dalam pasang surut, lalu bandingkan kondisi pasang purnama dan pasang perbani.</div><textarea class="hots-answer" data-hots="1" placeholder="Tuliskan jawaban berdasarkan analisismu..."></textarea><div class="save-info" id="saveInfo1">💾 Jawaban tersimpan otomatis saat mengetik.</div></div><button class="complete-btn" id="complete1" onclick="completeLesson(1)">✓ Saya Sudah Selesai Mempelajari Materi</button></div>
+</section>
+<!-- =================================================
+         MATERI 2 — EKOSISTEM DARAT
+    ================================================== -->
+<section class="lesson locked" data-lesson="2" id="populasi">
+<div class="lesson-header" onclick="toggleLesson(this)">
+<div class="lesson-number">🔒</div>
+<div class="lesson-title"><h3>Struktur Bumi</h3><span>Kerak, mantel, inti luar, dan inti dalam</span></div>
+<div class="lesson-status" id="status2">🔒 Terkunci</div>
+</div>
+<div class="lesson-content"><h4>B. Struktur Bumi</h4><p>Bumi tersusun atas lapisan-lapisan dengan wujud, suhu, ketebalan, kedalaman, dan material berbeda.</p><figure style="margin:20px 0;text-align:center"><img alt="Diagram lapisan Bumi: kerak samudra dan benua, litosfer, astenosfer, mantel atas dan bawah, inti luar dan inti dalam" src="data:image/jpeg;base64,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Rd+GRvXCSPUXC+urCv4/VctfuiJcnN6Dgt9kzH9XxYFX2htYXw9l+bV9BqdHQyd+GJ34o2uPqQq6bVSid/ZYfwve33XVifU8OSNZKypx6J1GG3divH9lbU0lFpJtpY2uNsjez2/heM/JcrpD2WtveCpIH3ZGYv77SPgu0bqdTtN2STsPMPHzCsIdFyM//Ie4fvxsJ9RZaP8AV1pP+1adfiXQp02aY/3Kxv8AMS+U/wDZhWX/AG1NbneW/ph+as9H+y1oN56lzh92NmD++4n4L6ayltvdfyt8ytjadvUpb1G8/wDZtr0X6KXQ2g6ekbhgha2+8jtOd+JxzKuIqfifRbg0DcFlUcmebLmPp4r5ERFoWRERAREQEREBERARFghBlFgBZQEREBERAWHC6yiDyGr0iICIiAiIgIiICIiAiIgIiICIhQEWoBbUBERAREQEREBERAREQZREUIERFIIiICIiAiIgIiICIiAiIgIiICIiDBWCVkrBCJZREQEREGUWEQZRYRBlFhEGUWEQZRYWUQLCysIkREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBAiICIiAiIgIiICIiAiIgIiIMoiKECIikEREBERAREQEREBERAREQEREBERBgohREiIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgyiIoQIiKQREQEREBERAREQEREBERAREQEREGCiIiRERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf/9k=" style="width:100%;max-width:720px;height:auto;border-radius:15px;border:1px solid #dbe9de"/><figcaption style="font-size:13px;color:#53695c;margin-top:9px">Ilustrasi lapisan-lapisan Bumi (Layers of Earth)</figcaption></figure><h4>1. Kerak Bumi</h4><p>Lapisan paling luar, <strong>padat</strong>. Kerak samudra sekitar 5–10 km, sedangkan kerak benua sekitar 20–70 km (dapat lebih tebal di bawah pegunungan). Suhu meningkat hingga sekitar 200–1.000 °C di bagian bawah. Kerak benua terutama tersusun atas granit; kerak samudra terutama basal. Kerak dan mantel paling atas membentuk <strong>litosfer</strong>.</p><h4>2. Mantel Luar</h4><p>Bagian mantel atas mencakup kedalaman dangkal hingga sekitar 660 km. Tersusun atas silikat kaya magnesium dan besi; umumnya padat, tetapi sebagian bersifat plastis terutama pada <strong>astenosfer</strong>. Suhunya meningkat dari sekitar 1.000 °C hingga beberapa ribu derajat pada bagian lebih dalam.</p><h4>3. Mantel Dalam</h4><p>Terletak pada kedalaman sekitar <strong>660–2.900 km</strong>, berwujud padat dan lebih kaku, dengan suhu sekitar 2.000–3.700 °C; tersusun atas silikat kaya magnesium dan besi.</p><h4>4. Inti Luar</h4><p>Terletak pada kedalaman sekitar <strong>2.900–5.150 km</strong>, berwujud <strong>cair</strong>, tersusun terutama dari besi dan nikel. Suhunya sekitar 4.000–5.500 °C. Gerakan logam cair membantu menghasilkan <strong>medan magnet Bumi</strong>.</p><h4>5. Inti Dalam</h4><p>Terletak pada kedalaman sekitar <strong>5.150–6.371 km</strong>, berwujud <strong>padat</strong> meskipun suhunya sekitar 5.000–6.000 °C, karena tekanan sangat besar. Tersusun terutama dari besi dan nikel.</p><div class="success-box"><strong>Ringkasan:</strong> Kerak padat → mantel padat namun dapat berubah bentuk sangat lambat → inti luar cair → inti dalam padat.</div><div class="hots-box"><div class="hots-title"><span>🧠</span><h4>HOTS – Analisis</h4></div><div class="hots-question">Mengapa inti dalam tetap padat meskipun suhunya sangat tinggi, sedangkan inti luar cair? Jelaskan pula mengapa kondisi inti luar penting bagi kehidupan di permukaan Bumi.</div><textarea class="hots-answer" data-hots="2" placeholder="Tuliskan jawaban berdasarkan analisismu..."></textarea><div class="save-info" id="saveInfo2">💾 Jawaban tersimpan otomatis saat mengetik.</div></div><button class="complete-btn" id="complete2" onclick="completeLesson(2)">✓ Saya Sudah Selesai Mempelajari Materi</button></div>
+</section>
+<!-- =================================================
+         MATERI 3 — EKOSISTEM PERAIRAN
+    ================================================== -->
+<section class="lesson locked" data-lesson="3" id="komunitas">
+<div class="lesson-header" onclick="toggleLesson(this)">
+<div class="lesson-number">🔒</div>
+<div class="lesson-title"><h3>Penerapan Bumi dan Antariksa</h3><span>Menghubungkan gravitasi dan struktur Bumi</span></div>
+<div class="lesson-status" id="status3">🔒 Terkunci</div>
+</div>
+<div class="lesson-content"><h4>Menghubungkan Dua Konsep</h4><p>Gravitasi memengaruhi gerak benda, orbit, dan pasang surut air laut. Struktur internal Bumi memiliki lapisan dengan sifat fisik berbeda, termasuk inti luar cair yang berperan dalam pembentukan medan magnet.</p><h4>Contoh Analisis 1 — Wilayah Pesisir</h4><p>Nelayan dan warga pesisir perlu memahami pasang surut karena perubahan tinggi muka air dapat memengaruhi waktu berlayar dan aktivitas di pantai. Posisi relatif Bumi, Bulan, dan Matahari menentukan rentang pasang-surut.</p><h4>Contoh Analisis 2 — Perlindungan Bumi</h4><p>Gerakan logam cair di inti luar berperan dalam terbentuknya medan magnet Bumi. Medan magnet membantu melindungi lingkungan Bumi dari sebagian partikel bermuatan yang datang dari Matahari.</p><div class="warning-box"><strong>Hubungan materi:</strong> Peristiwa di permukaan dan luar angkasa dapat dipahami melalui gravitasi, sementara sifat lapisan dalam Bumi membantu menjelaskan medan magnet planet kita.</div><div class="hots-box"><div class="hots-title"><span>🧠</span><h4>HOTS – Analisis</h4></div><div class="hots-question">Seorang siswa menyatakan bahwa inti Bumi semuanya cair dan Matahari merupakan satu-satunya penyebab pasang surut. Evaluasi kedua pernyataan tersebut menggunakan bukti dari materi, lalu tuliskan penjelasan yang lebih tepat.</div><textarea class="hots-answer" data-hots="3" placeholder="Tuliskan jawaban berdasarkan analisismu..."></textarea><div class="save-info" id="saveInfo3">💾 Jawaban tersimpan otomatis saat mengetik.</div></div><button class="complete-btn" id="complete3" onclick="completeLesson(3)">✓ Saya Sudah Selesai Mempelajari Materi</button></div>
+</section>
+<!-- =================================================
+         MATERI 4 — EKOSISTEM BUATAN
+    ================================================== -->
+<!-- =================================================
+         VIDEO
+    ================================================== -->
+<section class="special-section" id="videoSection">
+<div class="special-title">
+<div class="lesson-number">4</div>
+<h2>
+                🎬 Video Pembelajaran
+            </h2>
+</div>
+<div id="videoContent">
+<div class="lock-message" id="videoLockStatus">🔒 Video akan terbuka setelah ketiga materi selesai dipelajari.</div>
+</div>
+</section>
+<!-- =================================================
+         LKPD
+    ================================================== -->
+<section class="special-section" id="lkpdSection">
+<div class="special-title">
+<div class="lesson-number">5</div>
+<h2>
+                📝 LKPD
+            </h2>
+</div>
+<div id="lkpdContent">
+<div class="lock-message" id="lkpdLockStatus">
+
+                🔒 LKPD akan terbuka setelah kegiatan
+                video selesai.
+
+            </div>
+</div>
+</section>
+<!-- =================================================
+         GAME MENJODOHKAN
+    ================================================== -->
+<section class="special-section" id="gameSection">
+<div class="special-title">
+<div class="lesson-number">6</div>
+<h2>🧩 Game Tantangan Bumi dan Antariksa</h2>
+</div>
+<div id="gameContent">
+<div class="lock-message">🔒 Game akan terbuka setelah LKPD selesai dikerjakan.</div>
+</div>
+</section>
+<!-- =================================================
+         KUIS
+    ================================================== -->
+<section class="special-section" id="quizSection">
+<div class="special-title">
+<div class="lesson-number">7</div>
+<h2>
+                🧠 Kuis HOTS
+            </h2>
+</div>
+<div id="quizContent">
+<div class="lock-message" id="quizLockStatus">
+
+                🔒 Kuis akan terbuka setelah game menjodohkan dijawab benar semua.
+
+            </div>
+</div>
+<div class="quiz-result" id="quizScore" style="display:none;">
+
+            Nilai: -
+
+        </div>
+</section>
+<!-- =================================================
+         AKTIVITAS
+    ================================================== -->
+<div class="activity-box">
+<h3>
+            📊 Status Aktivitas
+        </h3>
+<div class="activity-item" id="activity1">
+<div class="activity-icon">
+                1
+            </div>
+<div>Materi Aliran Energi</div>
+</div>
+<div class="activity-item" id="activity2">
+<div class="activity-icon">
+                2
+            </div>
+<div>Materi Siklus Biogeokimia</div>
+</div>
+<div class="activity-item" id="activity3">
+<div class="activity-icon">
+                3
+            </div>
+<div>Materi Keseimbangan Lingkungan</div>
+</div>
+<div class="activity-item" id="activityVideo">
+<div class="activity-icon">4</div>
+<div>
+                Video Pembelajaran
+            </div>
+</div>
+<div class="activity-item" id="activityLKPD">
+<div class="activity-icon">5</div>
+<div>
+                LKPD
+            </div>
+</div>
+<div class="activity-item" id="activityGame">
+<div class="activity-icon">6</div>
+<div>
+                Game Menjodohkan
+            </div>
+</div>
+<div class="activity-item" id="activityQuiz">
+<div class="activity-icon">7</div>
+<div>
+                Kuis HOTS
+            </div>
+</div>
+</div>
+</main>
+<script>
+
+/* =====================================================
+   KONFIGURASI STORAGE
+===================================================== */
+
+const BASE_STORAGE_KEY = "edusmk_ipas_bumi_antariksa_v1";
+let STORAGE_KEY = BASE_STORAGE_KEY;
+const STUDENTS_KEY = "edusmk_ipas_bumi_antariksa_students_v1";
+// Setelah menerbitkan Google Apps Script, tempel URL Web App di bawah ini.
+const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz5q60MBkj6-G_qJKkx1gmfUtkPn8lfbWoaBXvBaVrYcLNHJZqCWfS3QUrmr3h2sbhmWg/exec"; // Isi dengan URL Web App milik LMS ini setelah dikonfigurasi.
+let activeStudent = null;
+let sheetsSyncTimer = null;
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let state = {
+
+    lessons:{
+        1:false,
+        2:false,
+        3:false,
+        3:false
+    },
+
+    hotsAnswers:{
+        1:"",
+        2:"",
+        3:"",
+        3:""
+    },
+
+    videoAnswers:[],
+    videoCompleted:false,
+
+    lkpdAnswers:[],
+    lkpdCompleted:false,
+    gameMatches:{},
+    gameCompleted:false,
+
+    quizScore:null,
+    quizAnswers:[]
+
+};
+
+
+/* =====================================================
+   LOAD STATE
+===================================================== */
+
+function loadState(){
+
+    const saved =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+    if(!saved){
+        return;
+    }
+
+
+    try{
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        state = {
+
+            ...state,
+
+            ...parsed,
+
+            lessons:{
+                ...state.lessons,
+                ...(parsed.lessons || {})
+            },
+
+            hotsAnswers:{
+                ...state.hotsAnswers,
+                ...(parsed.hotsAnswers || {})
+            }
+
+        };
+
+
+    }catch(error){
+
+        console.log(
+            "Progress sebelumnya tidak dapat dibaca."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE STATE
+===================================================== */
+
+function saveState(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state)
+    );
+
+    // Catat ringkasan progres per siswa ke Google Sheets.
+    if(activeStudent){
+        const registry = readStudentRegistry();
+        const done = [
+            !!state.lessons[1], !!state.lessons[2],
+            !!state.lessons[3],
+            !!state.videoCompleted, !!state.lkpdCompleted, !!state.gameCompleted,
+            typeof state.quizScore === "number"
+        ].filter(Boolean).length;
+        registry[activeStudent.id] = {
+            id: activeStudent.id,
+            name: activeStudent.name,
+            className: activeStudent.className,
+            absen: activeStudent.absen,
+            progress: Math.round(done / 7 * 100),
+            completedActivities: done,
+            totalActivities: 7,
+            lessons: state.lessons,
+            videoCompleted: !!state.videoCompleted,
+            lkpdCompleted: !!state.lkpdCompleted,
+            gameCompleted: !!state.gameCompleted,
+            quizScore: state.quizScore,
+            startedAt: registry[activeStudent.id]?.startedAt || new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            completed: done === 7
+        };
+        localStorage.setItem(STUDENTS_KEY, JSON.stringify(registry));
+        scheduleSheetsSync(registry[activeStudent.id]);
+    }
+
+}
+
+// Kirim ringkasan progres dan jawaban siswa per kolom ke Google Sheets.
+// Pengiriman ditunda agar setiap ketikan tidak membuat permintaan baru.
+function scheduleSheetsSync(record){
+    if(!GOOGLE_SHEETS_WEB_APP_URL || GOOGLE_SHEETS_WEB_APP_URL.includes("TEMPELKAN_URL")) return;
+    clearTimeout(sheetsSyncTimer);
+    const snapshot = JSON.parse(JSON.stringify(record));
+    // Kirim isi jawaban per kolom agar guru dapat meninjau jawaban tiap siswa.
+    snapshot.hotsAnswers = JSON.parse(JSON.stringify(state.hotsAnswers || {}));
+    snapshot.videoAnswers = JSON.parse(JSON.stringify(state.videoAnswers || []));
+    snapshot.lkpdAnswers = JSON.parse(JSON.stringify(state.lkpdAnswers || []));
+    snapshot.quizAnswers = (state.quizAnswers || []).map((selected, index) => {
+        if (selected === null || selected === undefined || selected === "") return "";
+        const q = (typeof quizQuestions !== "undefined") ? quizQuestions[index] : null;
+        const option = q && q.options ? q.options[Number(selected)] : "";
+        return option ? String.fromCharCode(65 + Number(selected)) + ". " + option : String(selected);
+    });
+    sheetsSyncTimer = setTimeout(() => {
+        fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "saveProgress", student: snapshot })
+        }).then(() => {
+            const label = document.getElementById("activeStudentLabel");
+            if(label) label.title = "Progres dikirim ke Google Sheets. Karena mode koneksi lintas situs, status server tidak dapat dikonfirmasi dari browser.";
+        }).catch(err => console.warn("Sinkronisasi Google Sheets gagal:", err));
+    }, 1800);
+}
+
+function readStudentRegistry(){
+    try { return JSON.parse(localStorage.getItem(STUDENTS_KEY) || "{}"); }
+    catch(e) { return {}; }
+}
+
+function startStudent(event){
+    event.preventDefault();
+    const name = document.getElementById("studentName").value.trim();
+    const className = document.getElementById("studentClass").value.trim();
+    const absen = document.getElementById("studentAbsen").value.trim();
+    if(!name || !className || !absen) return;
+
+    // Kunci siswa dibuat dari kelas + nomor absen agar progres tidak tercampur.
+    const id = (className + "_" + absen).toLowerCase().replace(/[^a-z0-9_-]+/g, "_");
+    activeStudent = {id, name, className, absen};
+    STORAGE_KEY = BASE_STORAGE_KEY + "__" + id;
+
+    // Mulai dengan state bersih, lalu muat progres milik siswa ini saja.
+    state = {
+        lessons:{1:false,2:false,3:false,3:false},
+        hotsAnswers:{1:"",2:"",3:"",3:""},
+        videoAnswers:[], videoCompleted:false,
+        lkpdAnswers:[], lkpdCompleted:false,
+        gameMatches:{}, gameCompleted:false,
+        quizScore:null, quizAnswers:[]
+    };
+    loadState();
+    document.getElementById("studentGate").style.display = "none";
+    const header = document.querySelector(".page-header");
+    if(header){
+        let identity = document.getElementById("activeStudentLabel");
+        if(!identity){
+            identity = document.createElement("p");
+            identity.id = "activeStudentLabel";
+            identity.style.cssText = "margin-top:10px;font-weight:700;color:#047857;";
+            header.appendChild(identity);
+        }
+        identity.textContent = "Peserta: " + name + " • " + className + " • Absen " + absen;
+    }
+    updateInterface();
+    document.querySelectorAll("[data-hots]").forEach(input => {
+        const idNum = Number(input.dataset.hots);
+        input.value = state.hotsAnswers[idNum] || "";
+    });
+    saveState();
+}
+
+document.getElementById("studentForm").addEventListener("submit", startStudent);
+
+
+/* =====================================================
+   AUTO SAVE HOTS
+===================================================== */
+
+function saveHOTSAnswer(
+    input
+){
+
+    const id =
+        Number(
+            input.dataset.hots
+        );
+
+
+    state.hotsAnswers[id] =
+        input.value;
+
+
+    saveState();
+
+
+    const info =
+        document.getElementById(
+            "saveInfo" + id
+        );
+
+
+    if(info){
+
+        info.textContent =
+            "✓ Jawaban tersimpan otomatis.";
+
+        info.classList.add(
+            "saved"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CEK BOLEH BUKA MATERI
+===================================================== */
+
+function canOpenLesson(id){
+
+    /*
+     * Materi pertama selalu terbuka.
+     */
+
+    if(id === 1){
+
+        return true;
+
+    }
+
+
+    /*
+     * Materi berikutnya hanya terbuka
+     * jika materi sebelumnya selesai.
+     */
+
+    return (
+        state.lessons[id - 1] === true
+    );
+
+}
+
+
+/* =====================================================
+   TOGGLE MATERI
+===================================================== */
+
+function toggleLesson(header){
+
+    const lesson =
+        header.closest(".lesson");
+
+
+    if(!lesson){
+        return;
+    }
+
+
+    const id =
+        Number(
+            lesson.dataset.lesson
+        );
+
+
+    /*
+     * CEK KUNCI
+     */
+
+    if(!canOpenLesson(id)){
+
+        lockedMessage(id);
+
+        return;
+
+    }
+
+
+    lesson.classList.remove(
+        "locked"
+    );
+
+
+    /*
+     * Tutup materi lain.
+     */
+
+    document.querySelectorAll(
+        ".lesson"
+    ).forEach(
+        item => {
+
+            if(item !== lesson){
+
+                item.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Buka materi yang dipilih.
+     */
+
+    lesson.classList.toggle(
+        "open"
+    );
+
+}
+
+
+/* =====================================================
+   PESAN TERKUNCI
+===================================================== */
+
+function lockedMessage(id){
+
+    const names = {
+
+        1:"Aliran Energi",
+
+        2:"Siklus Biogeokimia",
+
+        3:"Keseimbangan Lingkungan",
+
+        4:"Ekosistem Buatan"
+
+    };
+
+
+    if(id <= 1){
+        return;
+    }
+
+
+    const previous =
+        id - 1;
+
+
+    alert(
+
+        "🔒 Materi masih terkunci.\n\n" +
+
+        "Silakan selesaikan terlebih dahulu:\n" +
+
+        "Materi " +
+        previous +
+        " - " +
+        names[previous]
+
+    );
+
+}
+
+
+/* =====================================================
+   CEK HOTS
+===================================================== */
+
+function hasHOTSAnswer(id){
+
+    const answer =
+        state.hotsAnswers[id];
+
+
+    return (
+        typeof answer === "string" &&
+        answer.trim().length > 0
+    );
+
+}
+
+
+/* =====================================================
+   COMPLETE LESSON
+===================================================== */
+
+function completeLesson(id){
+
+    /*
+     * Pastikan materi boleh dibuka.
+     */
+
+    if(!canOpenLesson(id)){
+
+        lockedMessage(id);
+
+        return;
+
+    }
+
+
+    /*
+     * Cek jawaban HOTS.
+     */
+
+    if(!hasHOTSAnswer(id)){
+
+        alert(
+
+            "⚠️ Jawaban HOTS belum diisi.\n\n" +
+
+            "Silakan jawab soal HOTS terlebih dahulu " +
+
+            "sebelum menandai materi sebagai selesai."
+
+        );
+
+
+        const input =
+            document.querySelector(
+                `[data-hots="${id}"]`
+            );
+
+
+        if(input){
+
+            input.focus();
+
+            input.scrollIntoView({
+
+                behavior:"smooth",
+
+                block:"center"
+
+            });
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+     * Jika sudah selesai.
+     */
+
+    if(state.lessons[id]){
+
+        return;
+
+    }
+
+
+    /*
+     * Tandai selesai.
+     */
+
+    state.lessons[id] =
+        true;
+
+
+    saveState();
+
+    updateInterface();
+
+
+    /*
+     * Jika masih ada materi berikutnya.
+     */
+
+    if(id < 4){
+
+        setTimeout(
+
+            function(){
+
+                const next =
+                    document.querySelector(
+                        `.lesson[data-lesson="${id + 1}"]`
+                    );
+
+
+                if(next){
+
+                    next.classList.remove(
+                        "locked"
+                    );
+
+                    next.classList.add(
+                        "open"
+                    );
+
+
+                    next.scrollIntoView({
+
+                        behavior:"smooth",
+
+                        block:"start"
+
+                    });
+
+                }
+
+            },
+
+            300
+
+        );
+
+
+        alert(
+
+            "✅ Materi selesai dipelajari!\n\n" +
+
+            "Materi berikutnya sekarang telah terbuka."
+
+        );
+
+    }
+
+    else{
+
+        alert(
+
+            "🎉 Selamat!\n\n" +
+
+            "Semua materi utama telah selesai.\n\n" +
+
+            "Video pembelajaran sekarang telah terbuka."
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SEMUA MATERI SELESAI
+===================================================== */
+
+function allLessonsCompleted(){
+
+    return (
+
+        state.lessons[1] === true &&
+
+        state.lessons[2] === true &&
+
+        state.lessons[3] === true
+
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE LESSON
+===================================================== */
+
+function updateLessons(){
+
+    for(
+        let i = 1;
+        i <= 3;
+        i++
+    ){
+
+        const lesson =
+            document.querySelector(
+                `.lesson[data-lesson="${i}"]`
+            );
+
+
+        const status =
+            document.getElementById(
+                "status" + i
+            );
+
+
+        const button =
+            document.getElementById(
+                "complete" + i
+            );
+
+
+        if(!lesson){
+            continue;
+        }
+
+
+        const number =
+            lesson.querySelector(
+                ".lesson-number"
+            );
+
+
+        /*
+         * SELESAI
+         */
+
+        if(
+            state.lessons[i] === true
+        ){
+
+            lesson.classList.remove(
+                "locked"
+            );
+
+            lesson.classList.add(
+                "completed"
+            );
+
+
+            if(status){
+
+                status.textContent =
+                    "✓ Sudah Dipelajari";
+
+            }
+
+
+            if(number){
+
+                number.textContent =
+                    "✓";
+
+            }
+
+
+            if(button){
+
+                button.textContent =
+                    "✓ Materi Sudah Dipelajari";
+
+                button.classList.add(
+                    "completed"
+                );
+
+                button.disabled =
+                    true;
+
+            }
+
+        }
+
+
+        /*
+         * BOLEH DIBUKA
+         */
+
+        else if(
+            canOpenLesson(i)
+        ){
+
+            lesson.classList.remove(
+                "locked"
+            );
+
+
+            lesson.classList.remove(
+                "completed"
+            );
+
+
+            if(status){
+
+                status.textContent =
+                    "📖 Siap Dipelajari";
+
+            }
+
+
+            if(number){
+
+                number.textContent =
+                    i;
+
+            }
+
+
+            if(button){
+
+                button.disabled =
+                    false;
+
+                button.classList.remove(
+                    "completed"
+                );
+
+                button.textContent =
+                    "✓ Saya Sudah Selesai Mempelajari Materi";
+
+            }
+
+        }
+
+
+        /*
+         * TERKUNCI
+         */
+
+        else{
+
+            lesson.classList.add(
+                "locked"
+            );
+
+
+            if(status){
+
+                status.textContent =
+                    "🔒 Terkunci";
+
+            }
+
+
+            if(number){
+
+                number.textContent =
+                    "🔒";
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE MENU
+===================================================== */
+
+function updateMenu(){
+
+    const menuNames = [
+
+        null,
+
+        "menuIndividu",
+
+        "menuPopulasi",
+
+        "menuKomunitas"
+
+    ];
+
+
+    for(
+        let i = 1;
+        i <= 3;
+        i++
+    ){
+
+        const menu =
+            document.getElementById(
+                menuNames[i]
+            );
+
+
+        if(!menu){
+            continue;
+        }
+
+
+        if(
+            canOpenLesson(i)
+        ){
+
+            menu.classList.remove(
+                "locked"
+            );
+
+        }
+        else{
+
+            menu.classList.add(
+                "locked"
+            );
+
+        }
+
+    }
+
+
+    /*
+     * VIDEO
+     */
+
+    const videoMenu =
+        document.getElementById(
+            "menuVideo"
+        );
+
+
+    if(
+        allLessonsCompleted()
+    ){
+
+        videoMenu.classList.remove(
+            "locked"
+        );
+
+    }
+    else{
+
+        videoMenu.classList.add(
+            "locked"
+        );
+
+    }
+
+
+    /*
+     * LKPD
+     */
+
+    const lkpdMenu =
+        document.getElementById(
+            "menuLKPD"
+        );
+
+
+    if(
+        state.videoCompleted
+    ){
+
+        lkpdMenu.classList.remove(
+            "locked"
+        );
+
+    }
+    else{
+
+        lkpdMenu.classList.add(
+            "locked"
+        );
+
+    }
+
+
+    /*
+     * GAME MENJODOHKAN
+     */
+    const gameMenu = document.getElementById("menuGame");
+    if(gameMenu){
+        gameMenu.classList.toggle("locked", !state.lkpdCompleted);
+    }
+
+    /*
+     * QUIZ
+     */
+    const quizMenu = document.getElementById("menuQuiz");
+    if(quizMenu){
+        quizMenu.classList.toggle("locked", !state.gameCompleted);
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE PROGRESS
+===================================================== */
+
+function updateProgress(){
+
+    let completed =
+        0;
+
+
+    for(
+        let i = 1;
+        i <= 3;
+        i++
+    ){
+
+        if(
+            state.lessons[i]
+        ){
+
+            completed++;
+
+        }
+
+    }
+
+
+    if(
+        state.videoCompleted
+    ){
+
+        completed++;
+
+    }
+
+
+    if(
+        state.lkpdCompleted
+    ){
+
+        completed++;
+
+    }
+
+
+    if(state.gameCompleted){
+        completed++;
+    }
+
+
+    if(
+        state.quizScore !== null
+    ){
+
+        completed++;
+
+    }
+
+
+    const percent =
+        Math.round(
+            completed / 7 * 100
+        );
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        percent + "%";
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        percent + "%";
+
+}
+
+
+/* =====================================================
+   UPDATE AKTIVITAS
+===================================================== */
+
+function updateActivities(){
+
+    for(
+        let i = 1;
+        i <= 3;
+        i++
+    ){
+
+        const item =
+            document.getElementById(
+                "activity" + i
+            );
+
+
+        if(
+            state.lessons[i]
+        ){
+
+            item.classList.add(
+                "done"
+            );
+
+
+            item.querySelector(
+                ".activity-icon"
+            ).textContent =
+                "✓";
+
+        }
+
+    }
+
+
+    if(
+        state.videoCompleted
+    ){
+
+        const item =
+            document.getElementById(
+                "activityVideo"
+            );
+
+
+        item.classList.add(
+            "done"
+        );
+
+
+        item.querySelector(
+            ".activity-icon"
+        ).textContent =
+            "✓";
+
+    }
+
+
+    if(
+        state.lkpdCompleted
+    ){
+
+        const item =
+            document.getElementById(
+                "activityLKPD"
+            );
+
+
+        item.classList.add(
+            "done"
+        );
+
+
+        item.querySelector(
+            ".activity-icon"
+        ).textContent =
+            "✓";
+
+    }
+
+
+    const gameItem = document.getElementById("activityGame");
+    if(gameItem){
+        gameItem.classList.toggle("done", !!state.gameCompleted);
+        gameItem.querySelector(".activity-icon").textContent = state.gameCompleted ? "✓" : "7";
+    }
+
+
+    if(
+        state.quizScore !== null
+    ){
+
+        const item =
+            document.getElementById(
+                "activityQuiz"
+            );
+
+
+        item.classList.add(
+            "done"
+        );
+
+
+        item.querySelector(
+            ".activity-icon"
+        ).textContent =
+            "✓";
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER VIDEO
+===================================================== */
+
+function renderVideo(){
+ const container=document.getElementById("videoContent");
+ if(!allLessonsCompleted()){container.innerHTML='<div class="lock-message">🔒 Selesaikan ketiga materi dan soal HOTS terlebih dahulu.</div>';return;}
+ container.innerHTML=`<div class="video-container"><iframe src="https://www.youtube-nocookie.com/embed/dqKMYmhymqc" title="Video fenomena pasang surut air laut" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+ <div class="example-box"><strong>🎬 Petunjuk</strong><p>Tonton video mengenai pasang surut air laut, lalu jawab semua pertanyaan dengan bahasamu sendiri. Tidak ada petunjuk menit atau detik.</p><a href="https://www.youtube.com/watch?v=dqKMYmhymqc" target="_blank" rel="noopener noreferrer">Buka video di YouTube jika pemutar tidak tersedia</a></div><h3>Pertanyaan Video: Fenomena Pasang Surut</h3>
+ ${videoQuestion(0, "Apa yang dimaksud dengan fenomena pasang surut air laut, dan benda langit apa saja yang memengaruhinya?")}
+${videoQuestion(1, "Jelaskan bagaimana gravitasi Bulan menimbulkan perbedaan tinggi air laut di berbagai sisi Bumi menurut penjelasan video.")}
+${videoQuestion(2, "Mengapa pengaruh Bulan terhadap pasang surut lebih besar daripada Matahari walaupun massa Matahari jauh lebih besar?")}
+${videoQuestion(3, "Apa perbedaan pokok teori gravitasi Newton dan teori dinamika pasang surut Laplace dalam menjelaskan kondisi laut di Bumi?")}
+${videoQuestion(4, "Jelaskan posisi Matahari, Bumi, dan Bulan saat pasang purnama serta pengaruhnya terhadap rentang pasang dan surut.")}
+${videoQuestion(5, "Bagaimana posisi ketiga benda langit saat pasang perbani? Bandingkan dengan pasang purnama.")}
+${videoQuestion(6, "Seorang nelayan akan melaut ketika terjadi pasang purnama. Analisis informasi tentang tinggi muka air yang perlu ia pertimbangkan berdasarkan video.")}
+ <button class="complete-btn" onclick="completeVideo()">✓ Selesai Menjawab Pertanyaan</button>`;
+}
+
+/* =====================================================
+   VIDEO QUESTION
+===================================================== */
+
+function videoQuestion(
+    index,
+    question
+){
+
+    const answer =
+        state.videoAnswers[index] ||
+        "";
+
+
+    return `
+
+        <div class="question-box">
+
+            <strong>
+                ${index + 1}. ${question}
+            </strong>
+
+            <br><br>
+
+            <textarea
+                data-video="${index}"
+                placeholder="Tuliskan jawabanmu..."
+            >${answer}</textarea>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   COMPLETE VIDEO
+===================================================== */
+
+function completeVideo(){
+
+    const fields =
+        document.querySelectorAll(
+            "[data-video]"
+        );
+
+
+    const answers =
+        [];
+
+
+    for(
+        const field of fields
+    ){
+
+        const value =
+            field.value.trim();
+
+
+        if(!value){
+
+            alert(
+                "⚠️ Silakan jawab semua pertanyaan video terlebih dahulu."
+            );
+
+
+            field.focus();
+
+            return;
+
+        }
+
+
+        answers.push(
+            value
+        );
+
+    }
+
+
+    state.videoAnswers =
+        answers;
+
+
+    state.videoCompleted =
+        true;
+
+
+    saveState();
+
+    updateInterface();
+
+
+    alert(
+
+        "🎉 Kegiatan video selesai!\n\n" +
+
+        "LKPD sekarang telah dibuka."
+
+    );
+
+}
+
+
+/* =====================================================
+   RENDER LKPD
+===================================================== */
+
+function escapeHTML(v){return String(v ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function renderLKPD(){
+ const c=document.getElementById('lkpdContent');
+ if(!state.videoCompleted){c.innerHTML='<div class="lock-message">🔒 Selesaikan kegiatan video terlebih dahulu.</div>';return;}
+ const a=i=>escapeHTML(state.lkpdAnswers[i]||'');
+ const f=(i,placeholder='Isi jawaban...')=>`<textarea data-lkpd="${i}" aria-label="Jawaban LKPD ${i}" placeholder="${placeholder}">${a(i)}</textarea>`;
+ const q=(i,t)=>`<div class="question-box"><strong>${t}</strong>${f(i)}</div>`;
+ const grav=['Bumi','Bulan','Matahari'];
+ const layers=['Kerak Bumi','Mantel Luar','Mantel Dalam','Inti Luar','Inti Dalam'];
+ c.innerHTML=`<div class="example-box"><h3>📝 LKPD Bumi dan Antariksa</h3><p><strong>Tujuan:</strong> Menjelaskan gravitasi dan dampaknya; mengidentifikasi wujud, kedalaman, ketebalan, suhu, dan material lapisan Bumi.</p><p>Petunjuk: Baca materi, isi seluruh tabel dan pertanyaan dengan jelas. Jawaban tersimpan otomatis.</p></div>
+ <h3>Kegiatan 1: Gravitasi</h3><p>Lengkapi tabel berdasarkan bahan bacaan.</p>
+ <table class="lkpd-table"><thead><tr><th>Sumber Gravitasi</th><th>Besar Nilai Gravitasi</th><th>Dampak / Fenomena Alam (3 contoh)</th></tr></thead><tbody>${grav.map((x,j)=>`<tr><td><strong>Gravitasi ${x}</strong></td><td>${f(1+j*4,'Nilai atau keterangan besarnya gravitasi')}</td><td>${[1,2,3].map(k=>`<label>Contoh ${k}${f(1+j*4+k)}</label>`).join('')}</td></tr>`).join('')}</tbody></table>
+ ${q(13,'1. Mengapa pengaruh gravitasi Bulan terhadap pasang surut air laut lebih dominan dibanding gravitasi Matahari, padahal massa Matahari jauh lebih besar?')}
+ ${q(14,'2. Sebutkan satu fenomena alam di sekitar tempat tinggalmu yang dipengaruhi gravitasi Bumi!')}
+ <h3>Kegiatan 2: Struktur Bumi</h3><p>Lengkapi karakteristik setiap lapisan Bumi.</p>
+ <table class="lkpd-table"><thead><tr><th>Lapisan Bumi</th><th>Wujud</th><th>Kedalaman</th><th>Ketebalan</th><th>Suhu</th><th>Material Penyusun</th></tr></thead><tbody>${layers.map((x,j)=>`<tr><td><strong>${x}</strong></td>${[0,1,2,3,4].map(k=>`<td>${f(15+j*5+k)}</td>`).join('')}</tr>`).join('')}</tbody></table>
+ ${q(40,'1. Mengapa inti dalam Bumi berwujud padat, padahal suhunya sangat tinggi (hampir setara permukaan Matahari)?')}
+ ${q(41,'2. Lapisan manakah yang paling berperan menghasilkan medan magnet Bumi? Jelaskan alasannya!')}
+ <button class="complete-btn" onclick="completeLKPD()">✓ Selesai Mengerjakan LKPD</button>`;
+}
+
+/* =====================================================
+   COMPLETE LKPD
+===================================================== */
+
+function completeLKPD(){
+
+    const fields =
+        document.querySelectorAll(
+            "[data-lkpd]"
+        );
+
+
+    const answers =
+        [];
+
+
+    for(
+        const field of fields
+    ){
+
+        const value =
+            field.value.trim();
+
+
+        if(!value){
+
+            alert(
+                "⚠️ Silakan lengkapi seluruh LKPD terlebih dahulu."
+            );
+
+
+            field.focus();
+
+            return;
+
+        }
+
+
+        answers[field.dataset.lkpd] =
+            value;
+
+    }
+
+
+    const urutanNitrogen = [23,24,25,26,27].map(i => answers[i]);
+    if(new Set(urutanNitrogen).size !== 5){
+        alert("⚠️ Urutan siklus nitrogen harus menggunakan angka 1 sampai 5 tanpa pengulangan.");
+        return;
+    }
+
+    state.lkpdAnswers =
+        answers;
+
+
+    state.lkpdCompleted =
+        true;
+
+
+    saveState();
+
+    updateInterface();
+
+
+    alert(
+
+        "🎉 LKPD selesai!\n\n" +
+
+        "Game menjodohkan sekarang terbuka. Cocokkan semua pasangan dengan benar untuk membuka kuis HOTS."
+
+    );
+
+}
+
+
+/* =====================================================
+   GAME MENJODOHKAN JENIS EKOSISTEM
+===================================================== */
+const matchSources = [{"id": "gravitasi", "label": "Gravitasi", "answer": "gravitasi"}, {"id": "bulan", "label": "Gravitasi Bulan", "answer": "bulan"}, {"id": "purnama", "label": "Pasang Purnama", "answer": "purnama"}, {"id": "perbani", "label": "Pasang Perbani", "answer": "perbani"}, {"id": "kerak", "label": "Kerak Bumi", "answer": "kerak"}, {"id": "luar", "label": "Inti Luar", "answer": "luar"}, {"id": "dalam", "label": "Inti Dalam", "answer": "dalam"}];
+const matchTargets = [{"id": "dalam", "label": "Padat karena tekanan sangat tinggi di pusat Bumi."}, {"id": "perbani", "label": "Posisi Matahari, Bumi, dan Bulan membentuk sudut siku-siku."}, {"id": "luar", "label": "Logam cair yang bergerak berperan menghasilkan medan magnet Bumi."}, {"id": "bulan", "label": "Pengaruh gravitasi dominan pada pasang surut karena relatif dekat."}, {"id": "kerak", "label": "Lapisan paling luar dan tipis, tempat makhluk hidup tinggal."}, {"id": "purnama", "label": "Posisi tiga benda langit sejajar; rentang pasang-surut besar."}, {"id": "gravitasi", "label": "Gaya tarik-menarik antara benda yang memiliki massa."}];
+let activeMatchSource = null;
+let matchPreviewPoint = null;
+
+function renderGame(){
+    const container = document.getElementById("gameContent");
+    if(!container) return;
+    if(!state.lkpdCompleted){
+        container.innerHTML = '<div class="lock-message">🔒 <strong>Game masih terkunci.</strong><p>Selesaikan dan simpan LKPD terlebih dahulu.</p></div>';
+        return;
+    }
+    if(state.gameCompleted){
+        container.innerHTML = '<div class="match-status success"><strong>🏆 Tantangan selesai!</strong><br>Semua pasangan sudah benar. Kuis HOTS telah terbuka. Kamu bisa melanjutkan ke bagian kuis.</div>';
+        return;
+    }
+    const left = matchSources.map((item,i)=>`<div class="match-card"><span class="match-dot" role="button" tabindex="0" aria-label="Mulai garis dari ${item.label}" id="match-source-${item.id}" onpointerdown="beginMatch(event,'${item.id}')" onkeydown="matchKeyboardStart(event,'${item.id}')"></span><span class="match-text"><strong>${i+1}. ${item.label}</strong></span></div>`).join('');
+    const right = matchTargets.map((item,i)=>`<div class="match-card"><span class="match-text">${String.fromCharCode(65+i)}. ${item.label}</span><span class="match-dot target" role="button" tabindex="0" aria-label="Pasangan ciri ${String.fromCharCode(65+i)}" data-match-target="${item.id}" onpointerup="finishMatchOnTarget(event,'${item.id}')" onkeydown="matchKeyboardTarget(event,'${item.id}')"></span></div>`).join('');
+    container.innerHTML = `
+        <p>Uji ketelitianmu! Jodohkan setiap konsep dengan penjelasan yang tepat.</p>
+        <div class="match-instructions"><strong>🎯 Cara bermain</strong><br>Tekan dan tahan titik hijau di samping konsep, lalu tarik garis menuju titik kuning pada ciri yang sesuai. Semua pasangan harus benar sebelum kuis HOTS terbuka. Di layar sentuh, kamu juga bisa memilih titik hijau lalu mengetuk titik kuning.</div>
+        <div class="match-board" id="matchBoard">
+            <svg class="match-lines" id="matchLines" aria-hidden="true"><path id="matchPreview" class="preview" d="" style="display:none"></path></svg>
+            <div class="match-column"><h3>Konsep</h3>${left}</div>
+            <div class="match-column"><h3>Penjelasan</h3>${right}</div>
+        </div>
+        <div id="matchStatus" class="match-status" aria-live="polite">Pasangan terhubung: ${Object.keys(state.gameMatches||{}).length} dari ${matchSources.length}. Tarik garis untuk mulai.</div>
+        <div class="match-actions"><button class="complete-btn" type="button" onclick="checkMatchingGame()">✓ Periksa Pasangan</button><button class="match-secondary" type="button" onclick="resetMatchingGame()">Ulangi dari awal</button></div>
+    `;
+    requestAnimationFrame(renderMatchingLines);
+}
+
+function beginMatch(event, sourceId){
+    if(event) event.preventDefault();
+    activeMatchSource = sourceId;
+    matchPreviewPoint = event ? {x:event.clientX,y:event.clientY} : null;
+    renderMatchingLines();
+}
+function matchKeyboardStart(event, sourceId){
+    if(event.key === "Enter" || event.key === " "){
+        event.preventDefault(); activeMatchSource = sourceId;
+        const status = document.getElementById("matchStatus");
+        if(status) status.textContent = "Pilih titik kuning pada ciri yang cocok dengan " + matchSources.find(x=>x.id===sourceId).label + ".";
+    }
+}
+function matchKeyboardTarget(event, targetId){
+    if((event.key === "Enter" || event.key === " ") && activeMatchSource){
+        event.preventDefault(); setMatch(activeMatchSource,targetId); activeMatchSource = null;
+    }
+}
+function finishMatchOnTarget(event,targetId){
+    if(activeMatchSource){
+        event.preventDefault(); event.stopPropagation();
+        setMatch(activeMatchSource,targetId); activeMatchSource = null; matchPreviewPoint = null;
+    }
+}
+function setMatch(sourceId,targetId){
+    state.gameMatches = {...(state.gameMatches||{}),[sourceId]:targetId};
+    state.gameCompleted = false;
+    saveState();
+    renderGame();
+}
+function pointInBoard(el, boardRect){
+    const r=el.getBoundingClientRect();
+    return {x:r.left+r.width/2-boardRect.left,y:r.top+r.height/2-boardRect.top};
+}
+function renderMatchingLines(){
+    const board=document.getElementById("matchBoard"), svg=document.getElementById("matchLines");
+    if(!board||!svg) return;
+    const rect=board.getBoundingClientRect();
+    svg.setAttribute("viewBox",`0 0 ${rect.width} ${rect.height}`);
+    svg.setAttribute("width",rect.width); svg.setAttribute("height",rect.height);
+    let paths='';
+    Object.entries(state.gameMatches||{}).forEach(([source,target])=>{
+        const a=document.getElementById("match-source-"+source);
+        const b=document.querySelector(`[data-match-target="${target}"]`);
+        if(!a||!b) return;
+        const p1=pointInBoard(a,rect),p2=pointInBoard(b,rect);
+        paths+=`<path d="M ${p1.x} ${p1.y} C ${p1.x+35} ${p1.y}, ${p2.x-35} ${p2.y}, ${p2.x} ${p2.y}" />`;
+    });
+    svg.innerHTML=paths+'<path id="matchPreview" class="preview" d="" style="display:none"></path>';
+    if(activeMatchSource && matchPreviewPoint){
+        const a=document.getElementById("match-source-"+activeMatchSource);
+        if(a){
+            const p1=pointInBoard(a,rect), p2={x:matchPreviewPoint.x-rect.left,y:matchPreviewPoint.y-rect.top};
+            const preview=svg.querySelector("#matchPreview");
+            if(preview){preview.setAttribute("d",`M ${p1.x} ${p1.y} C ${p1.x+35} ${p1.y}, ${p2.x-35} ${p2.y}, ${p2.x} ${p2.y}`);preview.style.display="block";}
+        }
+    }
+}
+function checkMatchingGame(){
+    const matches=state.gameMatches||{};
+    const count=matchSources.filter(x=>matches[x.id]===x.answer).length;
+    const status=document.getElementById("matchStatus");
+    if(count===matchSources.length && Object.keys(matches).length===matchSources.length){
+        state.gameCompleted=true; saveState(); updateInterface();
+        alert("🎉 Hebat! Semua pasangan benar. Kuis HOTS sekarang terbuka.");
+        document.getElementById("quizSection")?.scrollIntoView({behavior:"smooth",block:"start"});
+    }else{
+        state.gameCompleted=false; saveState();
+        if(status){status.className="match-status retry";status.innerHTML=`Belum semua tepat: <strong>${count} dari ${matchSources.length}</strong> pasangan benar. Periksa lagi garis yang sudah kamu buat, lalu coba kembali.`;}
+    }
+}
+function resetMatchingGame(){
+    state.gameMatches={}; state.gameCompleted=false; activeMatchSource=null; matchPreviewPoint=null;
+    saveState(); updateInterface();
+}
+window.addEventListener("pointermove",event=>{
+    if(activeMatchSource){matchPreviewPoint={x:event.clientX,y:event.clientY};renderMatchingLines();}
+});
+window.addEventListener("pointerup",event=>{
+    if(!activeMatchSource) return;
+    const target=document.elementFromPoint(event.clientX,event.clientY)?.closest?.("[data-match-target]");
+    if(target){setMatch(activeMatchSource,target.dataset.matchTarget);}
+    activeMatchSource=null; matchPreviewPoint=null; renderMatchingLines();
+});
+window.addEventListener("resize",renderMatchingLines);
+
+
+/* =====================================================
+   DATA KUIS HOTS
+===================================================== */
+
+const quizQuestions = [
+  {
+    "question": "Penyebab utama benda yang dilepas jatuh ke tanah adalah...",
+    "options": [
+      "Gravitasi Bumi",
+      "Medan magnet",
+      "Angin",
+      "Cahaya Matahari",
+      "Rotasi Bulan"
+    ],
+    "answer": 0
+  },
+  {
+    "question": "Percepatan gravitasi rata-rata di permukaan Bumi sekitar...",
+    "options": [
+      "0,98 m/s²",
+      "9,8 m/s²",
+      "98 m/s²",
+      "3 m/s²",
+      "100 m/s²"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Mengapa Bulan lebih dominan memengaruhi pasang surut daripada Matahari?",
+    "options": [
+      "Bulan lebih besar daripada Matahari",
+      "Bulan lebih panas",
+      "Bulan jauh lebih dekat ke Bumi",
+      "Matahari tidak punya gravitasi",
+      "Bumi tidak dipengaruhi Matahari"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Saat Matahari, Bumi, dan Bulan berada segaris, kondisi yang mungkin terjadi adalah...",
+    "options": [
+      "Pasang perbani",
+      "Tidak ada pasang",
+      "Pasang purnama",
+      "Air laut selalu surut",
+      "Gravitasi hilang"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Saat posisi Bulan membentuk sudut siku-siku terhadap garis Bumi–Matahari, terjadi...",
+    "options": [
+      "Pasang purnama",
+      "Pasang perbani",
+      "Gerhana selalu terjadi",
+      "Hujan meteor",
+      "Perubahan kerak"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Kerak samudra umumnya tersusun terutama atas...",
+    "options": [
+      "Granit",
+      "Basal",
+      "Besi cair",
+      "Nikel cair",
+      "Es"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Bagian mantel yang lebih lunak dan memungkinkan gerak lempeng di atasnya adalah...",
+    "options": [
+      "Inti dalam",
+      "Kerak samudra",
+      "Astenosfer",
+      "Inti luar",
+      "Atmosfer"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Lapisan yang paling berperan membangkitkan medan magnet Bumi adalah...",
+    "options": [
+      "Kerak",
+      "Mantel dalam",
+      "Inti luar",
+      "Litosfer",
+      "Atmosfer"
+    ],
+    "answer": 2
+  },
+  {
+    "question": "Mengapa inti dalam tetap padat walaupun sangat panas?",
+    "options": [
+      "Tidak ada gravitasi",
+      "Tekanan di pusat Bumi sangat besar",
+      "Suhunya rendah",
+      "Tersusun atas air",
+      "Terletak di permukaan"
+    ],
+    "answer": 1
+  },
+  {
+    "question": "Jika siswa menyatakan seluruh bagian inti Bumi cair, koreksi paling tepat adalah...",
+    "options": [
+      "Benar karena semua logam mencair",
+      "Salah: inti luar cair, inti dalam padat",
+      "Benar karena inti sangat panas",
+      "Salah: keduanya berupa gas",
+      "Salah: inti luar berupa batuan kerak"
+    ],
+    "answer": 1
+  }
+];
+
+/* =====================================================
+   RENDER QUIZ
+===================================================== */
+
+function renderQuiz(){
+
+    const container =
+        document.getElementById(
+            "quizContent"
+        );
+
+
+    const scoreBox =
+        document.getElementById(
+            "quizScore"
+        );
+
+
+    if(
+        (!state.lkpdCompleted || !state.gameCompleted)
+    ){
+
+        container.innerHTML = `
+
+            <div class="lock-message">
+
+                🔒 <strong>
+                    Kuis masih terkunci.
+                </strong>
+
+                <p>
+                    Selesaikan LKPD, lalu jawab semua pasangan pada game dengan benar.
+                </p>
+
+            </div>
+
+        `;
+
+
+        scoreBox.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <p>
+
+            Jawablah seluruh pertanyaan berikut.
+            Setiap soal memiliki satu jawaban paling tepat.
+
+        </p>
+
+    `;
+
+
+    quizQuestions.forEach(
+
+        (q,index) => {
+
+            html += `
+
+                <div class="quiz-question">
+
+                    <h4>
+                        ${index + 1}.
+                        ${q.question}
+                    </h4>
+
+            `;
+
+
+            q.options.forEach(
+
+                (option,optionIndex) => {
+
+                    html += `
+
+                        <label class="option">
+
+                            <input
+                                type="radio"
+                                name="q${index}"
+                                value="${optionIndex}"
+                                ${(Number(state.quizAnswers[index]) === optionIndex && state.quizAnswers[index] !== "" && state.quizAnswers[index] !== null && state.quizAnswers[index] !== undefined) ? "checked" : ""}
+                            >
+
+                            ${String.fromCharCode(
+                                65 + optionIndex
+                            )}.
+
+                            ${option}
+
+                        </label>
+
+                    `;
+
+                }
+
+            );
+
+
+            html += `
+
+                </div>
+
+            `;
+
+        }
+
+    );
+
+
+    html += `
+
+        <button
+            class="complete-btn"
+            onclick="submitQuiz()">
+
+            ✓ Kirim Jawaban Kuis
+
+        </button>
+
+    `;
+
+
+    container.innerHTML =
+        html;
+
+
+    if(
+        state.quizScore !== null
+    ){
+
+        scoreBox.style.display =
+            "block";
+
+
+        scoreBox.textContent =
+            "🏆 Nilai Kuis: " +
+            state.quizScore;
+
+    }
+
+}
+
+
+/* =====================================================
+   SUBMIT QUIZ
+===================================================== */
+
+function submitQuiz(){
+
+    const answers =
+        [];
+
+
+    for(
+        let i = 0;
+        i < quizQuestions.length;
+        i++
+    ){
+
+        const selected =
+            document.querySelector(
+                `input[name="q${i}"]:checked`
+            );
+
+
+        if(!selected){
+
+            alert(
+                "⚠️ Silakan jawab semua soal terlebih dahulu."
+            );
+
+
+            return;
+
+        }
+
+
+        answers[i] =
+            Number(
+                selected.value
+            );
+
+    }
+
+
+    let correct =
+        0;
+
+
+    quizQuestions.forEach(
+
+        (question,index) => {
+
+            if(
+                answers[index] ===
+                question.answer
+            ){
+
+                correct++;
+
+            }
+
+        }
+
+    );
+
+
+    const score =
+        correct * 10;
+
+
+    state.quizScore =
+        score;
+
+
+    state.quizAnswers =
+        answers;
+
+
+    saveState();
+
+    updateInterface();
+
+
+    alert(
+
+        "🎉 Kuis selesai!\n\n" +
+
+        "Jawaban benar: " +
+
+        correct +
+
+        " dari " +
+
+        quizQuestions.length +
+
+        "\nNilai: " +
+
+        score
+
+    );
+
+}
+
+
+/* =====================================================
+   UPDATE SEMUA
+===================================================== */
+
+function updateInterface(){
+
+    updateLessons();
+
+    updateMenu();
+
+    updateProgress();
+
+    updateActivities();
+
+    renderVideo();
+
+    renderLKPD();
+
+    renderGame();
+
+    renderQuiz();
+
+
+    /*
+     * Isi kembali jawaban HOTS
+     * setelah halaman diperbarui.
+     */
+
+    for(
+        let i = 1;
+        i <= 3;
+        i++
+    ){
+
+        const input =
+            document.querySelector(
+                `[data-hots="${i}"]`
+            );
+
+
+        if(input){
+
+            input.value =
+                state.hotsAnswers[i] || "";
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   NAVIGASI MENU
+===================================================== */
+
+document.querySelectorAll(
+    ".menu-item"
+).forEach(
+
+    menu => {
+
+        menu.addEventListener(
+            "click",
+
+            function(event){
+
+                if(
+                    this.classList.contains(
+                        "locked"
+                    )
+                ){
+
+                    event.preventDefault();
+
+
+                    alert(
+
+                        "🔒 Bagian ini masih terkunci.\n\n" +
+
+                        "Selesaikan kegiatan sebelumnya terlebih dahulu."
+
+                    );
+
+
+                    return;
+
+                }
+
+
+                document.querySelectorAll(
+                    ".menu-item"
+                ).forEach(
+
+                    item => {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                );
+
+
+                this.classList.add(
+                    "active"
+                );
+
+            }
+
+        );
+
+    }
+
+);
+
+
+/* =====================================================
+   AUTO SAVE TEXTAREA HOTS
+===================================================== */
+
+document.addEventListener(
+    "input",
+
+    function(event){
+
+        if(
+            event.target.matches(
+                "[data-hots]"
+            )
+        ){
+
+            saveHOTSAnswer(
+                event.target
+            );
+
+        }
+
+    }
+
+);
+
+// Autosimpan jawaban video dan LKPD setiap kali siswa mengetik,
+// sehingga jawaban yang belum menekan tombol selesai tetap terkirim.
+document.addEventListener("input", function(event){
+    const field = event.target;
+    if (field.matches("[data-video]")) {
+        state.videoAnswers[Number(field.dataset.video)] = field.value;
+        saveState();
+    } else if (field.matches("[data-lkpd]")) {
+        state.lkpdAnswers[Number(field.dataset.lkpd)] = field.value;
+        saveState();
+    }
+});
+
+// Simpan pilihan kuis setiap kali siswa memilih jawaban.
+document.addEventListener("change", function(event){
+    const field = event.target;
+    if (field.matches('input[type="radio"][name^="q"]')) {
+        const questionIndex = Number(field.name.slice(1));
+        state.quizAnswers[questionIndex] = Number(field.value);
+        saveState();
+    }
+});
+
+
+/* =====================================================
+   INISIALISASI
+===================================================== */
+
+loadState();
+
+
+/*
+ * Pastikan jawaban HOTS
+ * muncul kembali.
+ */
+
+document.querySelectorAll(
+    "[data-hots]"
+).forEach(
+
+    input => {
+
+        const id =
+            Number(
+                input.dataset.hots
+            );
+
+
+        input.value =
+            state.hotsAnswers[id] || "";
+
+    }
+
+);
+
+
+updateInterface();
+
+
+/*
+ * Materi pertama selalu terbuka.
+ */
+
+const firstLesson =
+    document.querySelector(
+        '.lesson[data-lesson="1"]'
+    );
+
+
+if(firstLesson){
+
+    firstLesson.classList.remove(
+        "locked"
+    );
+
+}
+
+
+
+/* =====================================================
+   CEGAH COPY/CUT/PASTE DARI MENU, SHORTCUT, DAN DRAG-DROP
+===================================================== */
+(function lockCopyPaste(){
+    // Cegah menu klik-kanan serta aksi clipboard di halaman.
+    document.addEventListener('contextmenu', function(event){
+        event.preventDefault();
+    }, true);
+
+    ['copy','cut','paste'].forEach(function(eventName){
+        document.addEventListener(eventName, function(event){
+            event.preventDefault();
+            if(eventName === 'paste') {
+                const target = event.target;
+                if(target && (target.matches('input, textarea') || target.isContentEditable)) {
+                    target.setAttribute('data-paste-blocked','true');
+                }
+            }
+        }, true);
+    });
+
+    // Blokir tempel teks dari clipboard, termasuk pada kolom jawaban.
+    document.addEventListener('beforeinput', function(event){
+        if(event.inputType === 'insertFromPaste' || event.inputType === 'insertFromDrop') {
+            event.preventDefault();
+        }
+    }, true);
+    document.addEventListener('drop', function(event){
+        event.preventDefault();
+    }, true);
+    document.addEventListener('dragover', function(event){
+        event.preventDefault();
+    }, true);
+
+    // Blokir shortcut umum copy/cut/paste pada Windows, Mac, dan keyboard alternatif.
+    document.addEventListener('keydown', function(event){
+        const key = (event.key || '').toLowerCase();
+        const mod = event.ctrlKey || event.metaKey;
+        const blocked = (mod && ['c','x','v'].includes(key)) ||
+                        (event.ctrlKey && key === 'insert') ||
+                        (event.shiftKey && key === 'insert');
+        if(blocked) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }, true);
+})();
+
+</script>
+</body>
+</html>
